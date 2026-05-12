@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misión Gol de Letras</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- PANTALLA DE INICIO -->
+    <div id="pantallaInicio" class="pantalla activa">
+        <div class="contenedor-inicio">
+            <!-- Cancha de fútbol decorativa -->
+            <div class="cancha-decorativa">
+                <div class="circulo-central"></div>
+                <div class="porteria-superior"></div>
+                <div class="porteria-inferior"></div>
+            </div>
+            
+            <h1 class="titulo">⚽ Misión Gol de Letras ⚽</h1>
+            <p class="subtitulo">¡Escucha y marca gol!</p>
+            
+            <!-- Mostrar progreso guardado -->
+            <div class="progreso-inicio">
+                <p>Estrellas ganadas: <span id="estrellasGuardadas">0</span> ⭐</p>
+            </div>
+            
+            <button id="btnJugar" class="boton-grande">JUGAR</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE JUEGO -->
+    <div id="pantallaJuego" class="pantalla">
+        <div class="contenedor-juego">
+            <!-- Encabezado del juego -->
+            <div class="encabezado-juego">
+                <button id="btnVolver" class="boton-volver">← Volver</button>
+                <div class="estrellas-actuales">
+                    <span id="contadorEstrellas">0</span> ⭐
+                </div>
+            </div>
+
+            <!-- Área de escucha -->
+            <div class="area-escucha">
+                <h2 id="instrucciones" class="instrucciones">Escucha la sílaba</h2>
+                <button id="btnRepetir" class="boton-repetir">🔊 Repetir</button>
+            </div>
+
+            <!-- Área de selección con tarjetas -->
+            <div class="area-opciones">
+                <div id="opcion1" class="tarjeta-opcion" data-opcion="0">
+                    <span class="texto-tarjeta" id="texto1"></span>
+                </div>
+                <div id="opcion2" class="tarjeta-opcion" data-opcion="1">
+                    <span class="texto-tarjeta" id="texto2"></span>
+                </div>
+                <div id="opcion3" class="tarjeta-opcion" data-opcion="2">
+                    <span class="texto-tarjeta" id="texto3"></span>
+                </div>
+            </div>
+
+            <!-- Feedback visual (sin mensajes negativos) -->
+            <div id="feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <!-- Script del juego -->
+    <script src="game.js"></script>
+</body>
+</html>
