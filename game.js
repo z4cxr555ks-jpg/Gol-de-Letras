@@ -28,7 +28,7 @@ const PALABRAS_EJEMPLO = {
     'mu': 'muñeca',
     'pa': 'papá',
     'pe': 'pelota',
-    'pi': 'pina',
+    'pi': 'piña',
     'po': 'pollo',
     'pu': 'puerta',
     'la': 'lápiz',
@@ -52,7 +52,8 @@ let estadoJuego = {
     opciones: [],
     indiceCorrecto: 0,
     estrellas: 0,
-    respuestaSeleccionada: false
+    respuestaSeleccionada: false,
+    esperandoAudio: false
 };
 
 /* ========================================
@@ -126,7 +127,6 @@ function iniciarJuego() {
 
     // Cargar primera sílaba
     generarNuevoJuego();
-    repetirSilaba();
 }
 
 function volverAlInicio() {
@@ -142,6 +142,9 @@ function volverAlInicio() {
     // Limpiar feedback
     elementos.feedback.textContent = '';
     limpiarTarjetas();
+    
+    // Detener audio si está reproduciéndose
+    window.speechSynthesis.cancel();
 }
 
 /* ========================================
@@ -153,6 +156,7 @@ function generarNuevoJuego() {
     limpiarTarjetas();
     elementos.feedback.textContent = '';
     estadoJuego.respuestaSeleccionada = false;
+    estadoJuego.esperandoAudio = true;
 
     // Seleccionar una sílaba aleatoria
     estadoJuego.silabaActual = SILABAS[Math.floor(Math.random() * SILABAS.length)];
@@ -171,20 +175,35 @@ function generarNuevoJuego() {
     estadoJuego.opciones = opcionesDesorden.sort(() => Math.random() - 0.5);
     estadoJuego.indiceCorrecto = estadoJuego.opciones.indexOf(estadoJuego.silabaActual);
 
-    // Mostrar opciones en las tarjetas
+    // Mostrar instrucción
+    elementos.instrucciones.textContent = 'Escucha...';
+
+    // PRIMERO: mostrar las tarjetas VACÍAS
     elementos.opciones.forEach((opcion, index) => {
-        opcion.texto.textContent = estadoJuego.opciones[index].toUpperCase();
+        opcion.texto.textContent = '?';
         opcion.elemento.classList.remove('deshabilitada');
     });
 
-    // Actualizar instrucción
-    elementos.instrucciones.textContent = '¿Cuál es?';
+    // DESPUÉS: reproducir audio (con pequeño delay)
+    setTimeout(() => {
+        reproducirAudio(estadoJuego.silabaActual);
+        
+        // Mostrar las opciones DESPUÉS de que empiece el audio
+        setTimeout(() => {
+            elementos.opciones.forEach((opcion, index) => {
+                opcion.texto.textContent = estadoJuego.opciones[index].toUpperCase();
+            });
+            elementos.instrucciones.textContent = '¿Cuál es?';
+            estadoJuego.esperandoAudio = false;
+        }, 300);
+    }, 500);
 }
 
 function repetirSilaba() {
-    // Reproducir la sílaba usando SpeechSynthesis
-    // (API web nativa, sin dependencias externas)
-    reproducirAudio(estadoJuego.silabaActual);
+    // Solo permitir si no está esperando audio
+    if (!estadoJuego.esperandoAudio) {
+        reproducirAudio(estadoJuego.silabaActual);
+    }
 }
 
 function reproducirAudio(texto) {
@@ -206,7 +225,7 @@ function reproducirAudio(texto) {
 
 function seleccionarOpcion(indice) {
     // Evitar múltiples respuestas
-    if (estadoJuego.respuestaSeleccionada) {
+    if (estadoJuego.respuestaSeleccionada || estadoJuego.esperandoAudio) {
         return;
     }
 
@@ -227,7 +246,7 @@ function seleccionarOpcion(indice) {
         estadoJuego.estrellas += ESTRELLAS_POR_ACIERTO;
         elementos.contadorEstrellas.textContent = estadoJuego.estrellas;
 
-        // Reproducir audio de éxito (opcional)
+        // Reproducir audio de éxito
         reproducirAudio('¡Correcto!');
 
         // Pasar al siguiente después de un tiempo
@@ -258,6 +277,7 @@ function seleccionarOpcion(indice) {
 function limpiarTarjetas() {
     elementos.opciones.forEach(opcion => {
         opcion.elemento.classList.remove('correcta', 'incorrecta', 'deshabilitada');
+        opcion.texto.textContent = '';
     });
 }
 
@@ -281,25 +301,26 @@ window.addEventListener('beforeunload', () => {
 /* ========================================
    NOTAS PARA PAPÁ:
    
-   1. CAMBIAR SÍLABAS:
-      - Modifica el array SILABAS al inicio del archivo
-      - Ejemplo: const SILABAS = ['sa', 'se', 'si', 'so', 'su'];
+   FLUJO DEL JUEGO:
+   1. El niño ve las tarjetas con "?"
+   2. Escucha la sílaba
+   3. Aparecen las opciones
+   4. Elige una de las 3 opciones
+   5. Se muestra si es correcta (verde) o no
+   6. Próxima ronda
    
-   2. AGREGAR PALABRAS:
-      - Actualiza PALABRAS_EJEMPLO
-      - Se usará en futuras versiones para mostrar ejemplos
+   CAMBIAR SÍLABAS:
+   - Modifica el array SILABAS al inicio del archivo
+   - Ejemplo: const SILABAS = ['sa', 'se', 'si', 'so', 'su'];
    
-   3. AJUSTAR DIFICULTAD:
-      - Aumenta el número de opciones incorrectas en generarNuevoJuego()
-      - Cambia ESTRELLAS_POR_ACIERTO para más/menos recompensa
+   AJUSTAR DIFICULTAD:
+   - Aumenta el número de opciones incorrectas en generarNuevoJuego()
+   - Cambia ESTRELLAS_POR_ACIERTO para más/menos recompensa
    
-   4. VELOCIDAD DE AUDIO:
-      - utterance.rate: cambia de 0.5 (lento) a 2.0 (rápido)
+   VELOCIDAD DE AUDIO:
+   - utterance.rate: cambia de 0.5 (lento) a 2.0 (rápido)
    
-   5. REINICIAR PROGRESO:
-      - localStorage.clear() en la consola del navegador
-   
-   6. AGREGAR CRONÓMETRO O LÍMITES:
-      - Busca la función generarNuevoJuego() y agrega setTimeout()
+   REINICIAR PROGRESO:
+   - localStorage.clear() en la consola del navegador
    
    ======================================== */
