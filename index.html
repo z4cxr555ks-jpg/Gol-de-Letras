@@ -14,13 +14,58 @@
     <!-- PANTALLA DE INICIO -->
     <div id="pantallaInicio" class="pantalla activa">
         <div class="contenedor-inicio">
-            <!-- Cancha de fútbol decorativa -->
-            <div class="cancha-decorativa">
-                <div class="circulo-central"></div>
-                <div class="porteria-superior"></div>
-                <div class="porteria-inferior"></div>
+            <!-- Escena de fútbol en pantalla inicio -->
+            <div class="escena-inicio">
+                <!-- Cancha -->
+                <div class="cancha-inicio">
+                    <!-- Líneas de la cancha -->
+                    <div class="linea-lateral-inicio"></div>
+                    <div class="circulo-centro-inicio"></div>
+                    <div class="area-porterias-inicio">
+                        <!-- Portería izquierda -->
+                        <div class="porteria-inicio porteria-izq"></div>
+                        <!-- Portería derecha -->
+                        <div class="porteria-inicio porteria-der"></div>
+                    </div>
+                </div>
+
+                <!-- Jugador con balón (SVG) -->
+                <svg class="jugador-inicio" viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cabeza -->
+                    <circle cx="50" cy="25" r="15" fill="#FFB366"/>
+                    <!-- Cara -->
+                    <circle cx="45" cy="23" r="2" fill="#333"/>
+                    <circle cx="55" cy="23" r="2" fill="#333"/>
+                    <line x1="48" y1="28" x2="52" y2="28" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+                    <!-- Cuerpo (camiseta azul) -->
+                    <ellipse cx="50" cy="50" rx="12" ry="18" fill="#667eea"/>
+                    <!-- Número en camiseta -->
+                    <text x="50" y="52" font-size="10" font-weight="bold" fill="white" text-anchor="middle">7</text>
+                    <!-- Brazo izquierdo -->
+                    <line x1="38" y1="45" x2="28" y2="55" stroke="#FFB366" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Brazo derecho -->
+                    <line x1="62" y1="45" x2="72" y2="55" stroke="#FFB366" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Pierna izquierda -->
+                    <line x1="45" y1="68" x2="42" y2="95" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Pierna derecha -->
+                    <line x1="55" y1="68" x2="58" y2="95" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Zapato izquierdo -->
+                    <circle cx="42" cy="100" r="5" fill="#FFB366"/>
+                    <!-- Zapato derecho -->
+                    <circle cx="58" cy="100" r="5" fill="#FFB366"/>
+                </svg>
+
+                <!-- Balón -->
+                <svg class="balon-inicio" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" fill="#FFFFFF" stroke="#333" stroke-width="1.5"/>
+                    <!-- Pentágonos para patrón -->
+                    <circle cx="20" cy="20" r="3" fill="#333"/>
+                    <circle cx="20" cy="10" r="2" fill="#333"/>
+                    <circle cx="28" cy="24" r="2" fill="#333"/>
+                    <circle cx="12" cy="24" r="2" fill="#333"/>
+                </svg>
             </div>
-            
+
             <h1 class="titulo">⚽ Misión Gol de Letras ⚽</h1>
             <p class="subtitulo">¡Escucha y marca gol!</p>
             
@@ -29,13 +74,107 @@
                 <p>Estrellas ganadas: <span id="estrellasGuardadas">0</span> ⭐</p>
             </div>
             
-            <button id="btnJugar" class="boton-grande" aria-label="Botón para iniciar el juego">JUGAR</button>
+            <button id="btnJugar" class="boton-grande boton-videojuego" aria-label="Botón para iniciar el juego">JUGAR</button>
         </div>
     </div>
 
     <!-- PANTALLA DE JUEGO -->
     <div id="pantallaJuego" class="pantalla">
         <div class="contenedor-juego">
+            <!-- Escena dinámica de fútbol -->
+            <div class="escena-juego">
+                <!-- Cancha de juego -->
+                <svg class="cancha-juego" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Grass field -->
+                    <defs>
+                        <pattern id="cesped" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <line x1="0" y1="0" x2="20" y2="20" stroke="#1a8c3a" stroke-width="1" opacity="0.3"/>
+                        </pattern>
+                    </defs>
+                    <rect width="400" height="200" fill="#2ecc71"/>
+                    <rect width="400" height="200" fill="url(#cesped)"/>
+                    <!-- Línea central -->
+                    <line x1="200" y1="0" x2="200" y2="200" stroke="white" stroke-width="2"/>
+                    <!-- Círculo central -->
+                    <circle cx="200" cy="100" r="20" fill="none" stroke="white" stroke-width="2"/>
+                    <!-- Área de portería izquierda -->
+                    <rect x="0" y="50" width="40" height="100" fill="none" stroke="white" stroke-width="2"/>
+                    <!-- Área de portería derecha -->
+                    <rect x="360" y="50" width="40" height="100" fill="none" stroke="white" stroke-width="2"/>
+                </svg>
+
+                <!-- Portería izquierda (donde se defiende) -->
+                <div class="porteria-juego porteria-izq-juego">
+                    <svg viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Arco -->
+                        <rect x="10" y="20" width="60" height="80" fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Palos -->
+                        <line x1="15" y1="20" x2="15" y2="100" stroke="#333" stroke-width="3"/>
+                        <line x1="65" y1="20" x2="65" y2="100" stroke="#333" stroke-width="3"/>
+                        <line x1="15" y1="100" x2="65" y2="100" stroke="#333" stroke-width="3"/>
+                    </svg>
+                    <!-- Red -->
+                    <div class="red-porteria"></div>
+                </div>
+
+                <!-- Portero animado -->
+                <svg class="portero" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cabeza -->
+                    <circle cx="30" cy="20" r="12" fill="#FFB366"/>
+                    <!-- Ojos -->
+                    <circle cx="25" cy="18" r="1.5" fill="#333"/>
+                    <circle cx="35" cy="18" r="1.5" fill="#333"/>
+                    <!-- Cuerpo (camiseta diferente) -->
+                    <rect x="20" y="32" width="20" height="20" rx="3" fill="#e74c3c"/>
+                    <!-- Brazos levantados (atajando) -->
+                    <line x1="20" y1="38" x2="5" y2="25" stroke="#FFB366" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="40" y1="38" x2="55" y2="25" stroke="#FFB366" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Piernas -->
+                    <line x1="24" y1="52" x2="24" y2="75" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="36" y1="52" x2="36" y2="75" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+
+                <!-- Balón dinámico -->
+                <svg class="balon-juego" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="15" cy="15" r="13" fill="#FFFFFF" stroke="#333" stroke-width="1"/>
+                    <!-- Pentágonos -->
+                    <circle cx="15" cy="15" r="2" fill="#333"/>
+                    <circle cx="15" cy="8" r="1.5" fill="#333"/>
+                    <circle cx="21" cy="18" r="1.5" fill="#333"/>
+                    <circle cx="9" cy="18" r="1.5" fill="#333"/>
+                </svg>
+
+                <!-- Jugador principal (posición inicial centro) -->
+                <svg class="jugador-juego" viewBox="0 0 80 140" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cabeza -->
+                    <circle cx="40" cy="25" r="12" fill="#FFB366"/>
+                    <!-- Ojos -->
+                    <circle cx="35" cy="23" r="1.5" fill="#333"/>
+                    <circle cx="45" cy="23" r="1.5" fill="#333"/>
+                    <!-- Sonrisa -->
+                    <path d="M 35 26 Q 40 28 45 26" stroke="#333" fill="none" stroke-width="1" stroke-linecap="round"/>
+                    <!-- Cuerpo (camiseta azul) -->
+                    <ellipse cx="40" cy="48" rx="10" ry="16" fill="#667eea"/>
+                    <!-- Número -->
+                    <text x="40" y="50" font-size="8" font-weight="bold" fill="white" text-anchor="middle">10</text>
+                    <!-- Brazo izquierdo -->
+                    <line x1="30" y1="43" x2="20" y2="50" stroke="#FFB366" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Brazo derecho -->
+                    <line x1="50" y1="43" x2="60" y2="50" stroke="#FFB366" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Pierna izquierda -->
+                    <line x1="36" y1="64" x2="34" y2="90" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Pierna derecha -->
+                    <line x1="44" y1="64" x2="46" y2="90" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Zapato izquierdo -->
+                    <circle cx="34" cy="95" r="4" fill="#FFB366"/>
+                    <!-- Zapato derecho -->
+                    <circle cx="46" cy="95" r="4" fill="#FFB366"/>
+                </svg>
+
+                <!-- Contenedor de confeti/estrellas -->
+                <div id="contenedor-celebracion" class="contenedor-celebracion"></div>
+            </div>
+
             <!-- Encabezado del juego -->
             <div class="encabezado-juego">
                 <button id="btnVolver" class="boton-volver" aria-label="Volver a la pantalla principal">← Volver</button>
