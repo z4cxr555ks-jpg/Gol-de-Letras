@@ -97,7 +97,7 @@ function inicializarJuego() {
     // Cargar estrellas guardadas
     const estrellasGuardadas = localStorage.getItem('golDeLetrasEstrellas');
     if (estrellasGuardadas) {
-        estadoJuego.estrellas = parseInt(estrellasGuardadas);
+        estadoJuego.estrellas = Number(estrellasGuardadas);
         elementos.estrellasGuardadas.textContent = estadoJuego.estrellas;
         elementos.contadorEstrellas.textContent = estadoJuego.estrellas;
     }
@@ -131,7 +131,7 @@ function iniciarJuego() {
 
 function volverAlInicio() {
     // Guardar progreso
-    localStorage.setItem('golDeLetrasEstrellas', estadoJuego.estrellas);
+    guardarProgreso();
 
     // Cambiar a pantalla de inicio
     pantallas.juego.classList.remove('activa');
@@ -236,15 +236,19 @@ function seleccionarOpcion(indice) {
         opcion.elemento.classList.add('deshabilitada');
     });
 
+    // Registrar y guardar la recompensa antes de cualquier audio o animación.
+    const esCorrecta = indice === estadoJuego.indiceCorrecto;
+    estadoJuego.estrellas += esCorrecta
+        ? ESTRELLAS_POR_ACIERTO
+        : ESTRELLAS_POR_ACIERTO * 0.5;
+    guardarProgreso();
+    elementos.contadorEstrellas.textContent = estadoJuego.estrellas;
+
     // Verificar si es correcto
-    if (indice === estadoJuego.indiceCorrecto) {
+    if (esCorrecta) {
         // ¡CORRECTO! 🎉
         elementos.opciones[indice].elemento.classList.add('correcta');
         elementos.feedback.textContent = '⚽ ¡GOL! ⚽';
-
-        // Agregar estrella
-        estadoJuego.estrellas += ESTRELLAS_POR_ACIERTO;
-        elementos.contadorEstrellas.textContent = estadoJuego.estrellas;
 
         // Reproducir audio de éxito
         reproducirAudio('¡Correcto!');
@@ -261,10 +265,6 @@ function seleccionarOpcion(indice) {
         setTimeout(() => {
             elementos.opciones[estadoJuego.indiceCorrecto].elemento.classList.add('correcta');
             elementos.feedback.textContent = '✓';
-
-            // Agregar estrella de todos modos (refuerzo positivo)
-            estadoJuego.estrellas += Math.floor(ESTRELLAS_POR_ACIERTO * 0.5); // Media estrella
-            elementos.contadorEstrellas.textContent = estadoJuego.estrellas;
 
             // Pasar al siguiente después de un tiempo
             setTimeout(() => {
@@ -289,14 +289,16 @@ function cargarProgreso() {
     // Esta función se puede expandir para cargar más datos
     const estrellas = localStorage.getItem('golDeLetrasEstrellas');
     if (estrellas) {
-        estadoJuego.estrellas = parseInt(estrellas);
+        estadoJuego.estrellas = Number(estrellas);
     }
 }
 
-// Guardar progreso cada vez que se vuelve al inicio
-window.addEventListener('beforeunload', () => {
+function guardarProgreso() {
     localStorage.setItem('golDeLetrasEstrellas', estadoJuego.estrellas);
-});
+}
+
+// Respaldo adicional al cerrar o recargar la página
+window.addEventListener('beforeunload', guardarProgreso);
 
 /* ========================================
    NOTAS PARA PAPÁ:
